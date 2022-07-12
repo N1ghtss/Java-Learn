@@ -4,6 +4,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
+import java.util.Random;
 
 public class Heart extends Frame {
     public void Start() {
@@ -20,10 +21,12 @@ public class Heart extends Frame {
         //可见性
         heart.setVisible(true);
         //移动
+        Random random = new Random();
+        int x=random.nextInt(1920);
         int index = 0;
         while (true){
-            heart.setLocation(0,index);
-            index=index+1;
+            heart.setLocation(x,index);
+            index=index+random.nextInt(20)+1;
             try {
                 Thread.sleep(20);
             } catch (InterruptedException e) {
@@ -41,7 +44,9 @@ public class Heart extends Frame {
         try {
             FileInputStream file = new FileInputStream("image\\公子的心.png");
             BufferedImage image = ImageIO.read(file);
-            g.drawImage(image, 0, 0, 400, 400, null);
+            Random s=new Random();
+            int i=s.nextInt(100)+20;
+            g.drawImage(image, 0, 0, i, i, null);
         } catch (Exception e) {
             e.printStackTrace();
         }
