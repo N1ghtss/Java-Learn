@@ -6,7 +6,7 @@ import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 
 public class Heart extends Frame {
-    public static void main(String[] args) {
+    public void Start() {
         Heart heart = new Heart();
         //窗口大小
         heart.setSize(400, 400);
