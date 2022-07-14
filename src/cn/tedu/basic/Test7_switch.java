@@ -4,8 +4,16 @@ import java.util.Scanner;
 
 public class Test7_switch {
     public static void main(String[] args) {
-        System.out.println("请输入成绩：");
-        double s = new Scanner(System.in).nextDouble();
+        System.out.println("请输入分数：");
+        int s = new Scanner(System.in).nextInt();
+        while (true) {
+            if (s<0|s>100){
+                System.out.println("分数异常，请重新输入");
+                s = new Scanner(System.in).nextInt();
+            }else {
+                break;
+            }
+        }
         String level = null;
         if (s >= 90) {
             level = "1";
