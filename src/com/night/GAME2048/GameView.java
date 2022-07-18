@@ -76,6 +76,7 @@ public class GameView {
         gameBoard = new GameBoard();
         gameBoard.setBounds(0, 100, 400, 400);
         gameBoard.setBackground(Color.GRAY);
+        gameBoard.setFocusable(true);   //  焦点即当前正在操作的组件，也就是移动的数字
         gameBoard.setLayout(new FlowLayout());
         jFrameMain.add(gameBoard);
     }
@@ -93,6 +94,7 @@ public class GameView {
 
         public GameBoard() {
             initGame();
+            addKeyListener(this);
         }
 
         private void initGame() {
@@ -140,6 +142,17 @@ public class GameView {
                     dramCheck(g, i, j);
                 }
             }
+            if (GameOver()) {
+                g.setColor(new Color(64, 64, 64, 150));
+                g.fillRect(0, 0, getWidth(), getHeight());
+                g.setColor(Color.WHITE);
+                g.setFont(topicFont);
+                FontMetrics fms = getFontMetrics(topicFont);
+                String value = "Game Over!";
+                g.drawString(value,
+                        (getWidth() - fms.stringWidth(value)) / 2,
+                        getHeight() / 2);
+            }
         }
 
         //绘制方格
@@ -184,12 +197,154 @@ public class GameView {
 
         @Override
         public void keyPressed(KeyEvent e) {
-
+            switch (e.getKeyCode()) {
+                case KeyEvent.VK_ESCAPE:
+                    initGame();
+                    break;
+                case KeyEvent.VK_LEFT:
+                    moveLeft();
+                    createCheck();
+                    GameOver();
+                    break;
+                case KeyEvent.VK_RIGHT:
+                    moveRight();
+                    createCheck();
+                    GameOver();
+                    break;
+                case KeyEvent.VK_UP:
+                    moveUp();
+                    createCheck();
+                    GameOver();
+                    break;
+                case KeyEvent.VK_DOWN:
+                    moveDown();
+                    createCheck();
+                    GameOver();
+                    break;
+                default:
+                    break;
+            }
+            repaint();//刷新，会自动调用paint（）方法，重新绘制移动后的图
         }
+
+        public boolean GameOver() {
+            Jscore.setText(score + "");
+            if (!getEmptyChecks().isEmpty()) {
+                return false;
+            }
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    if (checks[i][j].value == checks[i][j + 1].value || checks[i][j].value == checks[i + 1][j].value) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        /**
+         * 重难点 -- 数字移动 -- 以moveLeft()为例
+         * 1） 按左键，若最左边是相同的，则合并
+         * 2） 若左边是空格，则直接移动到最左即可
+         * 3） 若最最左边不为空格且不相等，则看它右边是否由空格，是则移动到其旁边
+         */
+
+        private boolean moveLeft() {
+            for (int i = 0; i < 4; i++) {
+                for (int j = 1, index = 0; j < 4; j++) {
+                    if (checks[i][j].value > 0) {
+                        if (checks[i][j].value == checks[i][index].value) {
+                            score += checks[i][index++].value *= 2;
+                            checks[i][j].value = 0;
+                            isadd = true;
+                        } else if (checks[i][index].value == 0) {
+                            checks[i][index].value = checks[i][j].value;
+                            checks[i][j].value = 0;
+                            isadd = true;
+                        } else if (checks[i][++index].value == 0) {
+                            checks[i][index].value = checks[i][j].value;
+                            checks[i][j].value = 0;
+                            isadd = true;
+                        }
+                    }
+                }
+            }
+            return isadd;
+        }
+
+        private boolean moveRight() {
+            for (int i = 0; i < 4; i++) {
+                for (int j = 2, index = 3; j >= 0; j--) {
+                    if (checks[i][j].value > 0) {
+                        if (checks[i][j].value == checks[i][index].value) {
+                            score += checks[i][index].value *= 2;
+                            checks[i][j].value = 0;
+                            isadd = true;
+                        } else if (checks[i][index].value == 0) {
+                            checks[i][index].value = checks[i][j].value;
+                            checks[i][j].value = 0;
+                            isadd = true;
+                        } else if (checks[i][--index].value == 0) {
+                            checks[i][index].value = checks[i][j].value;
+                            checks[i][j].value = 0;
+                            isadd = true;
+                        }
+                    }
+                }
+            }
+            return isadd;
+        }
+
+        private boolean moveDown() {
+            for (int i = 0; i < 4; i++) {
+                for (int j = 2, index = 3; j >= 0; j--) {
+                    if (checks[j][i].value > 0) {
+                        if (checks[j][i].value == checks[index][i].value) {
+                            score += checks[index][i].value *= 2;
+                            checks[j][i].value = 0;
+                            isadd = true;
+                        } else if (checks[index][i].value == 0) {
+                            checks[index][i].value = checks[j][i].value;
+                            checks[j][i].value = 0;
+                            isadd = true;
+                        } else if (checks[--index][i].value == 0) {
+                            checks[index][i].value = checks[j][i].value;
+                            checks[j][i].value = 0;
+                            isadd = true;
+                        }
+                    }
+                }
+            }
+            return isadd;
+        }
+
+        private boolean moveUp() {
+            for (int i = 0; i < 4; i++) {
+                for (int j = 1, index = 0; j < 4; j++) {
+                    if (checks[j][i].value > 0) {
+                        if (checks[j][i].value == checks[index][i].value) {
+                            score += checks[index][i].value *= 2;
+                            checks[j][i].value = 0;
+                            isadd = true;
+                        } else if (checks[index][i].value == 0) {
+                            checks[index][i].value = checks[j][i].value;
+                            checks[j][i].value = 0;
+                            isadd = true;
+                        } else if (checks[++index][i].value == 0) {
+                            checks[index][i].value = checks[j][i].value;
+                            checks[j][i].value = 0;
+                            isadd = true;
+                        }
+                    }
+                }
+            }
+            return isadd;
+        }
+
 
         @Override
         public void keyReleased(KeyEvent e) {
-
         }
     }
 }
+
