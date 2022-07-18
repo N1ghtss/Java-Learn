@@ -22,6 +22,7 @@ public class Check {
             case 0:
                 return new Color(0xcdc1b4);
             case 2:
+                
             case 4:
                 return Color.BLACK;
             default:

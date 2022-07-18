@@ -92,7 +92,7 @@ public class GameView {
         private boolean isadd = true;
 
         public GameBoard() {
-
+            initGame();
         }
 
         private void initGame() {
@@ -130,6 +130,51 @@ public class GameView {
                 }
             }
             return list;
+        }
+
+        @Override
+        public void paint(Graphics g) {
+            super.paint(g);
+            for (int i = 0; i < 4; i++) {
+                for (int j = 0; j < 4; j++) {
+                    dramCheck(g, i, j);
+                }
+            }
+        }
+
+        //绘制方格
+        //Graphics2D 类拓展了Graphics类
+        //提供了对几何形状、坐标转换、颜色管理和文本布局更为复杂的控制
+        private void dramCheck(Graphics g, int i, int j) {
+            Graphics2D g1 = (Graphics2D) g;
+            //是图形去除锯齿状，可以得到细腻的图形
+            g1.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g1.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_NORMALIZE);
+            Check check = checks[i][j];
+            g1.setColor(check.getBackground());
+            //绘制圆角
+            //  x - 要填充矩形的X坐标
+            //  y - 要填充矩形的Y坐标
+            // width - 要填充矩形的宽度
+            // height - 要填充矩形的高度
+            // ARC-width -- 4个角弧度的水平直径
+            // ARC-height -- 4个角弧度的垂直直径
+            g1.fillRoundRect(CHECK_GAP + (CHECK_GAP + CHECK_SIZE) * j, CHECK_GAP + (CHECK_GAP + CHECK_SIZE) * i, CHECK_SIZE, CHECK_SIZE, CHECK_ARC, CHECK_ARC);
+            g1.setColor(check.getFontGround());
+            g1.setFont(check.getFont());
+
+            //  对文字的长宽高测量
+            FontMetrics fms = getFontMetrics(check.getFont());
+            String value = String.valueOf(check.value);
+
+            // 使用此图形上下文的当前颜色绘制由指定迭代器给定的文本
+            // getAscent() -- 它返回某字体的基线(baseline)到该字体中大多数字符的升部之间的距离
+            // getDescent() -- 为降部
+            g1.drawString(value,
+                    CHECK_GAP + (CHECK_GAP + CHECK_SIZE) * j +
+                            (CHECK_SIZE - fms.stringWidth(value)) / 2,
+                    CHECK_GAP + (CHECK_GAP + CHECK_SIZE) * i +
+                            (CHECK_SIZE - fms.getAscent() - fms.getDescent()) / 2 + fms.getAscent());
         }
 
         @Override
