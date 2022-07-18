@@ -17,11 +17,12 @@ public class GameView {
     Font scoreFont = new Font("微软雅黑", Font.BOLD, 28);
     Font explainFont = new Font("宋体", Font.PLAIN, 20); //PLAIN-正常字体
 
-    private JFrame jFrameMain;
-    private JLabel JTitle;
+    private JFrame jFrameMain;  //主框架定义名字
+    private JLabel JTitle;  //窗口在最上面显示
     private JLabel JScoreName;
     private JLabel Jscore;
     private JLabel JTips;
+    private GameBoard gameBoard;
 
     public GameView() {
         init();
@@ -71,70 +72,79 @@ public class GameView {
         JTips.setBounds(0, 60, 400, 40);
         jFrameMain.add(JTips);
 
-        //游戏面板需要对键值实现监听
-        //内部类继承JPanel类，实现接口监听KeyListener中的KeyPressed方法
-        class GameBoard extends JPanel implements KeyListener {
+        //5.游戏面板
+        gameBoard = new GameBoard();
+        gameBoard.setBounds(0, 100, 400, 400);
+        gameBoard.setBackground(Color.GRAY);
+        gameBoard.setLayout(new FlowLayout());
+        jFrameMain.add(gameBoard);
+    }
 
-            private static final int CHECK_GAP = 10;    //  方格之间的间隙
-            private static final int CHECK_SIZE = 85;   //  方格的大小
-            private static final int CHECK_ARC = 20;    //  方格的弧度
+    //游戏面板需要对键值实现监听
+    //内部类继承JPanel类，实现接口监听KeyListener中的KeyPressed方法
+    class GameBoard extends JPanel implements KeyListener {
 
-            private Check[][] checks = new Check[4][4];
-            private boolean isadd = true;
+        private static final int CHECK_GAP = 10;    //  方格之间的间隙
+        private static final int CHECK_SIZE = 85;   //  方格的大小
+        private static final int CHECK_ARC = 20;    //  方格的弧度
 
-            public GameBoard() {
+        private Check[][] checks = new Check[4][4];
+        private boolean isadd = true;
 
-            }
+        public GameBoard() {
 
-            private void initGame() {
-                score = 0;
-                for (int Row = 0; Row < 4; Row++) {
-                    for (int Col = 0; Col < 4; Col++) {
-                        checks[Row][Col] = new Check();
-                    }
-                }
-                //  生成两个数
-                isadd = true;
-                createCheck();
-            }
+        }
 
-            private void createCheck() {
-                List<Check> list = getEmptyChecks();
-                if (!list.isEmpty() && isadd) {
-                    Random random = new Random();
-                    int index = random.nextInt(list.size());
-                    Check check = list.get(index);
-                    check.value = (random.nextInt(4) % 3 == 0) ? 2 : 4;
+        private void initGame() {
+            score = 0;
+            for (int Row = 0; Row < 4; Row++) {
+                for (int Col = 0; Col < 4; Col++) {
+                    checks[Row][Col] = new Check();
                 }
             }
+            //  生成两个数
+            isadd = true;
+            createCheck();
+            isadd = true;
+            createCheck();
+        }
 
-            private List<Check> getEmptyChecks() {
-                List<Check> list = new ArrayList<>();
-                for (int i = 0; i < 4; i++) {
-                    for (int j = 0; j < 4; j++) {
-                        if (checks[i][j].value == 0) {
-                            list.add(checks[i][j]);
-                        }
-                    }
-                }
-                return list;
-            }
-
-            @Override
-            public void keyTyped(KeyEvent e) {
-
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-
+        private void createCheck() {
+            List<Check> list = getEmptyChecks();
+            if (!list.isEmpty() && isadd) {
+                Random random = new Random();
+                int index = random.nextInt(list.size());
+                Check check = list.get(index);
+                check.value = (random.nextInt(4) % 3 == 0) ? 2 : 4;
             }
         }
 
+        //  获取空白方格
+        private List<Check> getEmptyChecks() {
+            List<Check> list = new ArrayList<>();
+            for (int i = 0; i < 4; i++) {
+                for (int j = 0; j < 4; j++) {
+                    if (checks[i][j].value == 0) {
+                        list.add(checks[i][j]);
+                    }
+                }
+            }
+            return list;
+        }
+
+        @Override
+        public void keyTyped(KeyEvent e) {
+
+        }
+
+        @Override
+        public void keyPressed(KeyEvent e) {
+
+        }
+
+        @Override
+        public void keyReleased(KeyEvent e) {
+
+        }
     }
 }
