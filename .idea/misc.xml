@@ -8,6 +8,7 @@
       <list>
         <option value="$PROJECT_DIR$/../MavenDemo/pom.xml" />
         <option value="$PROJECT_DIR$/MavenDemo/pom.xml" />
+        <option value="$PROJECT_DIR$/Mybatis/pom.xml" />
       </list>
     </option>
   </component>
