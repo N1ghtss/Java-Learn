@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--namespace：用于标识当前这个mapper文件（就是一个名字）在mybatis程序中需要通过这个名字来定位这个mapper文件
+    通过namespace值 + id值可以定位要执行的是哪条sql语句
+-->
+<mapper namespace="EmpMapper">
+    <!-- 查询emp中的所有员工信息 -->
+    <!-- id属性：要求当前这个文件中的id值必须是独一无二的 一般对应方法名 -->
+    <!-- resultType属性：指定查询的结果要存放在哪个类型的对象中 -->
+    <select id="findAll" resultType="cn.night.mybatis.pojo.Emp">
+        select * from emp
+    </select>
+
+</mapper>
