@@ -32,15 +32,21 @@ public class Test01 {
 
     @Test
     public void Insert() throws Exception {
+        //1.注册驱动
         Class.forName("com.mysql.jdbc.Driver");
+        //2.获取连接
         String url = "jdbc:mysql://localhost:3306/db_bbw?characterEncoding=utf-8";
         String username = "root";
         String password = "123456";
         Connection conn = DriverManager.getConnection(url, username, password);
-
+        //3.获取传输器
         Statement st = conn.createStatement();
+        //4.执行sql语句并返回执行的结果
         String sql = "insert into account values(NULL,'john',3500)";
-        st.executeUpdate(sql);
+        int i = st.executeUpdate(sql);
+        //5.处理结果
+        System.out.println("影响行数：" + i);
+        //6.释放资源
         st.close();
         conn.close();
     }
@@ -78,6 +84,9 @@ public class Test01 {
             double money = rs.getDouble("money");
             System.out.println(id + ":" + name + ":" + money);
         }
+        rs.close();
+        st.close();
+        conn.close();
 
     }
 
