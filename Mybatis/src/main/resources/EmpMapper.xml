@@ -13,5 +13,11 @@
     <select id="findAll" resultType="cn.night.mybatis.pojo.Emp">
         select * from emp
     </select>
+    <update id="update">
+        update emp set id = #{id}, name = #{name}, job = #{job}, salary = #{salary} where name = #{name}
+    </update>
+    <delete id="delete">
+        delete from emp where id=1
+    </delete>
 
 </mapper>

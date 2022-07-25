@@ -19,7 +19,9 @@ public class TestMybatis01 {
         // 3.打开与数据库的连接（通过工厂对象获取SQL Session对象）
         SqlSession session = factory.openSession();
         // 4.通过namespace+id找到要执行的sql语句并执行该语句
+//        session.delete("EmpMapper.delete");
         List<Emp> list = session.selectList("EmpMapper.findAll");
+
         // 5.输出结果
         for (Emp emp : list) {
             System.out.println(emp);
